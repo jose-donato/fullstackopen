@@ -1,0 +1,14 @@
+title 0.4: new note
+
+browser->server: HTTP POST https://full-stack-exampleapp.herokuapp.com/new_note
+note right of server: server responds with HTTP status code 302, asks browser to do a new HTTP GET request to /notes
+browser->server: HTTP GET https://full-stack-exampleapp.herokuapp.com/notes
+server->browser: HTML-code
+browser->server: HTTP GET https://full-stack-exampleapp.herokuapp.com/main.css
+server->browser: main.css
+browser->server: HTTP GET https://full-stack-exampleapp.herokuapp.com/main.js
+server->browser: main.js
+note left of browser: browser starts executing js-code that requests JSON data from server
+browser->server: HTTP GET https://full-stack-exampleapp.herokuapp.com/data.js
+server->browser: data.json
+note left of browser: browser executes the event handler that renders notes to display
