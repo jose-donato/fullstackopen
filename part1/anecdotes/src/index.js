@@ -7,20 +7,42 @@ const random = (length) => Math.floor(Math.random() * length)
 
 const App = (props) => {
     const [selected, setSelected] = useState(0)
+    const [points, setPoints] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 })
+    const [max, setMax] = useState(0)
 
-    const handleClick = () => {
-        console.log("dlawoldwaodaw")
-        const rand = random(10)
+    const handleVote = () => {
+        const newPoints = { ...points }
+        newPoints[selected] += 1
+        setPoints(newPoints)
+        mostVotes()
+    }
+    const handleNext = () => {
+        const rand = random(anecdotes.length - 1)
         setSelected(rand)
-        console.log(selected)
+    }
+
+    const mostVotes = () => {
+        const max = Object.keys(points).reduce(function (prev, current) {
+            if (points[prev] < points[current]) return current
+            return prev
+        })
+        setMax(max)
     }
 
     return (
         <div>
             <div>
-                {props.anecdotes[selected]}
+                <h1>Anecdote of the day</h1>
+                <p>{props.anecdotes[selected]}</p>
+                <p>has {points[selected]} votes</p>
+                <h1>Anecdote with most votes</h1>
+                <p>{props.anecdotes[max]}</p>
+                <p>has {points[max]} votes</p>
+
             </div>
-            <CustomButton text={"next anecdote"} onClick={() => console.log("dlwaldwla")} />
+            <CustomButton text={"next anecdote"} handleClick={handleNext} />
+            <CustomButton text={"vote"} handleClick={handleVote} />
+
         </div>
     )
 }
