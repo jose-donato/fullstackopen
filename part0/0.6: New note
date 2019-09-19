@@ -1,5 +1,0 @@
-title 0.6: New note
-
-browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
-note left of browser: request contains the new note as JSON-string using the JS code fetched from the server before 
-
