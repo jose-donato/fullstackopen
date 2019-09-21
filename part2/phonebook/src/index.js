@@ -53,7 +53,7 @@ const App = () => {
                     })
                     .catch(error => {
                         setErrorMessage(
-                            `Information of ${personToChange.name} has already been removed from server`
+                            `${newName} already changed`
                         )
                         setTimeout(() => {
                             setErrorMessage(null)
@@ -82,6 +82,14 @@ const App = () => {
                     }, 5000)
                     setNewName('')
                     setNewNumber('')
+                })
+                .catch(error => {
+                    setErrorMessage(
+                        error.response.data['error']['message']
+                    )
+                    setTimeout(() => {
+                        setErrorMessage(null)
+                    }, 5000)
                 })
         }
     }
