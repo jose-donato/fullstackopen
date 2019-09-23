@@ -6,3 +6,5 @@ part2/courseinfo/node_modules
 part2/phonebook/node_modules
 part3/phonebook-api/node_modules
 part3/phonebook-api/.env
+part4/bloglist-api/.env
+part4/bloglist-api/node_modules

@@ -1,0 +1,10 @@
+post http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RlIiwiaWQiOiI1ZDg4ZjAxYmY5YTZhMTcyYzcyMDYxYmYiLCJpYXQiOjE1NjkyNzEzMTd9.Uvm1Lmv7bZd7wwxaUOoYocuyhDH1cS5qgwxXZg5aQIM
+
+{
+  "url": "teste",
+  "author": "1234",
+  "title": "odlwa",
+  "userId": "5d88f01bf9a6a172c72061bf"
+}
