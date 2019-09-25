@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Notification from './components/notification/notification.component'
 import CustomForm from './components/custom-form/custom-form.component'
 import Blog from './components/blog/blog.component'
+import Toggable from './components/toggable/toggable.component'
 
 import blogService from './services/blogs'
 import loginService from './services/network'
@@ -18,6 +19,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+
+  const blogFormRef = React.createRef()
 
 
   useEffect(() => {
@@ -62,35 +65,38 @@ const App = () => {
 
 
   const addBlogForm = () => (
-    <CustomForm onSubmit={handleAddBlog} submitText={'create'}>
-      <div>
-        title:
-          <input
-          type="text"
-          value={title}
-          name="title"
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-      <div>
-        author:
-          <input
-          type="text"
-          value={author}
-          name="author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        url:
-          <input
-          type="text"
-          value={url}
-          name="url"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-    </CustomForm>
+    <Toggable ref={blogFormRef} buttonLabel={'new blog'}>
+      <h3>create new</h3>
+      <CustomForm onSubmit={handleAddBlog} submitText={'create'}>
+        <div>
+          title:
+            <input
+            type="text"
+            value={title}
+            name="title"
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
+          author:
+            <input
+            type="text"
+            value={author}
+            name="author"
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
+          url:
+            <input
+            type="text"
+            value={url}
+            name="url"
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
+      </CustomForm>
+    </Toggable>
   )
 
   const handleAddBlog = async (event) => {
@@ -153,7 +159,6 @@ const App = () => {
           <p>{user.name} logged in <button onClick={handleLogout} type="submit">logout</button></p>
           {
             <div>
-              <h3>create new</h3>
               {addBlogForm()}
               {blogs.map(blog => (
                 <Blog key={blog.id} blog={blog} />
