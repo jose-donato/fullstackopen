@@ -26,6 +26,16 @@ const App = () => {
   useEffect(() => {
     blogService
       .getAll().then(initialBlogs => {
+        initialBlogs.sort(function (a, b) {
+          if (a.likes > b.likes) {
+            return 1
+          }
+          if (a.likes < b.likes) {
+            return -1
+          }
+          // a must be equal to b
+          return 0
+        });
         setBlogs(initialBlogs)
       })
   }, [])
@@ -145,6 +155,16 @@ const App = () => {
     blogService.setToken(null)
   }
 
+  async function handleLike(blog) {
+    const updatedBlog = await blogService.update(blog.id, { user: blog.userId, author: blog.author, title: blog.title, url: blog.url, likes: blog.likes + 1 })
+    setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog))
+  }
+
+  async function handleRemove(blog) {
+    await blogService.remove(blog.id, { userId: blog.user.id })
+    setBlogs(blogs.filter(b => b.id !== blog.id))
+  }
+
   return (
     <div className="App">
       <Notification message={errorMessage} type={'error'} />
@@ -161,7 +181,7 @@ const App = () => {
             <div>
               {addBlogForm()}
               {blogs.map(blog => (
-                <Blog key={blog.id} blog={blog} />
+                <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog)} handleRemove={() => handleRemove(blog)} userId={user.userId} />
               ))}
             </div>
           }

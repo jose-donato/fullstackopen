@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import blogService from '../../services/blogs'
+import PropTypes from 'prop-types'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLike, handleRemove, userId }) => {
   const [extraInfo, setExtraInfo] = useState(false)
 
   const blogStyle = {
@@ -16,21 +16,14 @@ const Blog = ({ blog }) => {
     setExtraInfo(!extraInfo)
   }
 
-  const handleLike = async () => {
-    const updatedBlog = await blogService.update(blog.id, { ...blog, likes: blog.likes + 1 })
-    blog = updatedBlog
-  }
 
-  const handleRemove = async () => {
-    await blogService.remove(blog.id, { userId: blog.user })
-  }
 
   const renderAll = () => (
     <div>
       <a href={blog.url}>{blog.url}</a>
       <p>{blog.likes} likes </p> <button type='submit' onClick={handleLike}>like</button>
-      <p>added by {blog.user}</p>
-      <button type='submit' onClick={handleRemove}>remove</button>
+      {blog.user ? <p>added by {blog.user.username}</p> : <p>added by unknown</p>}
+      {blog.user.id === userId ? <button type='submit' onClick={handleRemove}>remove</button> : null}
     </div>
   )
 
@@ -43,4 +36,12 @@ const Blog = ({ blog }) => {
     </div>
   )
 }
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleRemove: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired
+}
+
 export default Blog

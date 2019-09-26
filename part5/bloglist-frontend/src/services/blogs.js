@@ -27,7 +27,6 @@ const update = async (id, newObject) => {
 }
 
 const remove = async (id, data) => {
-  console.log(data)
   const headers = {
     Authorization: token
   }
