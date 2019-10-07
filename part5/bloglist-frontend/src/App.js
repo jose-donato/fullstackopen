@@ -7,37 +7,47 @@ import Toggable from './components/toggable/toggable.component'
 
 import blogService from './services/blogs'
 import loginService from './services/network'
-
+import { useField, useResource } from './hooks/index'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  //const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  //const [username, setUsername] = useState('')
+  //const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  /*const title = useField('text')
+  const author = useField('text')
+  const title = useField('text')*/
+  const username = useField('text')
+  const password = useField('password')
+  const [blogs, blogService] = useResource('/api/blogs')
 
   const blogFormRef = React.createRef()
 
+  const clearReset = (fieldProp) => {
+    const { reset, ...restOfProps } = fieldProp
+    return restOfProps
+  }
 
   useEffect(() => {
-    blogService
-      .getAll().then(initialBlogs => {
-        initialBlogs.sort(function (a, b) {
-          if (a.likes > b.likes) {
-            return 1
-          }
-          if (a.likes < b.likes) {
-            return -1
-          }
-          // a must be equal to b
-          return 0
-        });
-        setBlogs(initialBlogs)
+    async function fetchBlogs() {
+      const initialBlogs = await blogService.getAll()
+      const sortedBlogs = initialBlogs.sort(function (a, b) {
+        if (a.likes > b.likes) {
+          return 1
+        }
+        if (a.likes < b.likes) {
+          return -1
+        }
+        return 0
       })
+      blogService.setValue(sortedBlogs)
+    }
+    fetchBlogs()
   }, [])
 
   useEffect(() => {
@@ -53,21 +63,11 @@ const App = () => {
     <CustomForm onSubmit={handleLogin} submitText={'login'}>
       <div>
         username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
+          <input {...clearReset(username)} />
       </div>
       <div>
         password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
+          <input {...clearReset(password)} />
       </div>
     </CustomForm>
   )
@@ -115,8 +115,8 @@ const App = () => {
       const userId = user.userId
       const blog = await blogService.create({
         title, author, url, userId
-      })
-      setBlogs(blogs.concat(blog))
+      }, user.token)
+      blogService.setValue(blogs.concat(blog))
       setSuccessMessage(`a new blog ${title} by ${author} added`)
     } catch (exception) {
       setErrorMessage('wrong credentials')
@@ -130,7 +130,7 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({
-        username, password,
+        username: username['value'], password: password['value']
       })
 
       window.localStorage.setItem(
@@ -138,8 +138,8 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
+      username.reset()
+      password.reset()
     } catch (exception) {
       setErrorMessage('wrong credentials')
       setTimeout(() => {
@@ -157,12 +157,12 @@ const App = () => {
 
   async function handleLike(blog) {
     const updatedBlog = await blogService.update(blog.id, { user: blog.userId, author: blog.author, title: blog.title, url: blog.url, likes: blog.likes + 1 })
-    setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog))
+    blogService.setValue(blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog))
   }
 
   async function handleRemove(blog) {
     await blogService.remove(blog.id, { userId: blog.user.id })
-    setBlogs(blogs.filter(b => b.id !== blog.id))
+    blogService.setValue(blogs.filter(b => b.id !== blog.id))
   }
 
   return (

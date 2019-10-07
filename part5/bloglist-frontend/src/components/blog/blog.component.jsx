@@ -29,19 +29,22 @@ const Blog = ({ blog, handleLike, handleRemove, userId }) => {
 
   return (
     <div style={blogStyle}>
-      <div onClick={handleClick}>
+      <div onClick={handleClick} className='clickable'>
         {blog.title} {blog.author}
       </div>
-      {extraInfo ? renderAll() : null}
+      <div className='renderAllContent'>
+        {extraInfo ? renderAll() : null}
+      </div>
     </div>
+
   )
 }
 
-Blog.propTypes = {
+/*Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   handleLike: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
   userId: PropTypes.string.isRequired
-}
+}*/
 
 export default Blog
