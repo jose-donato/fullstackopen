@@ -70,11 +70,11 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
     <CustomForm onSubmit={handleLogin} submitText={'login'}>
       <div>
         username
-        <input {...clearReset(usernameField)} />
+        <input id="login-username" {...clearReset(usernameField)} />
       </div>
       <div>
         password
-        <input {...clearReset(passwordField)} />
+        <input id="login-password" {...clearReset(passwordField)} />
       </div>
     </CustomForm>
   )
@@ -84,10 +84,11 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
   const addBlogForm = () => (
     <Toggable ref={blogFormRef} buttonLabel={'new blog'}>
       <h3>create new</h3>
-      <CustomForm onSubmit={handleAddBlog} submitText={'create'}>
+      <CustomForm onSubmit={handleAddBlog} submitText={'create blog'}>
         <div>
           title:
           <input
+            id="add-blog-title"
             type="text"
             value={title}
             name="title"
@@ -97,6 +98,7 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
         <div>
           author:
           <input
+            id="add-blog-author"
             type="text"
             value={author}
             name="author"
@@ -106,6 +108,7 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
         <div>
           url:
           <input
+            id="add-blog-url"
             type="text"
             value={url}
             name="url"

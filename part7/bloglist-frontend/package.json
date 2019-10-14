@@ -22,7 +22,8 @@
     "startwp": "webpack-dev-server --mode=development",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -45,13 +46,9 @@
     "enzyme-adapter-react-16": "^1.7.0",
     "eslint-plugin-jest": "^22.19.0",
     "eslint-plugin-react-hooks": "^2.1.2",
-    "webpack": "^4.41.0",
-    "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.1",
     "@babel/core": "^7.6.2",
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
     "style-loader": "^1.0.0",
     "cypress": "^3.4.1"
