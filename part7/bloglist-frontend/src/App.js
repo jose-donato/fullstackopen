@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
 import Notification from './components/notification/notification.component'
 import CustomForm from './components/custom-form/custom-form.component'
@@ -6,12 +6,11 @@ import Blog from './components/blog/blog.component'
 import Toggable from './components/toggable/toggable.component'
 
 import loginService from './services/network'
-import blogService from './services/blogs'
-import { useField, useResource } from './hooks/index'
+import { useField } from './hooks/index'
 import { connect } from 'react-redux'
 
-import {initializeUsers} from './redux/reducers/usersReducer'
-import {initializeBlogs, createBlog, likeBlog, removeBlog} from './redux/reducers/blogReducer'
+import { initializeUsers } from './redux/reducers/usersReducer'
+import { initializeBlogs, createBlog, likeBlog, removeBlog } from './redux/reducers/blogReducer'
 import { setUser, logout, setToken } from './redux/reducers/userReducer'
 import { setNotification } from './redux/reducers/notificationReducer'
 
@@ -36,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog, likeBlog, setUser, setToken, userId, name, username, removeBlog, setNotification}) => {
+const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog, likeBlog, setUser, setToken, userId, username, removeBlog, setNotification }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -71,11 +70,11 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
     <CustomForm onSubmit={handleLogin} submitText={'login'}>
       <div>
         username
-          <input {...clearReset(usernameField)} />
+        <input {...clearReset(usernameField)} />
       </div>
       <div>
         password
-          <input {...clearReset(passwordField)} />
+        <input {...clearReset(passwordField)} />
       </div>
     </CustomForm>
   )
@@ -88,7 +87,7 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
       <CustomForm onSubmit={handleAddBlog} submitText={'create'}>
         <div>
           title:
-            <input
+          <input
             type="text"
             value={title}
             name="title"
@@ -97,7 +96,7 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
         </div>
         <div>
           author:
-            <input
+          <input
             type="text"
             value={author}
             name="author"
@@ -106,7 +105,7 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
         </div>
         <div>
           url:
-            <input
+          <input
             type="text"
             value={url}
             name="url"
@@ -130,7 +129,7 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
       }, 2)
     } catch (exception) {
       setNotification({
-        message: `wrong credentials`,
+        message: 'wrong credentials',
         style: 'error'
       }, 2)
     }
@@ -152,7 +151,7 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
       passwordField.reset()
     } catch (exception) {
       setNotification({
-        message: `wrong credentials`,
+        message: 'wrong credentials',
         style: 'error'
       }, 2)
     }
@@ -170,7 +169,7 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
   }
 
   async function handleRemove(id) {
-    removeBlog(id, {userId})
+    removeBlog(id, { userId })
   }
 
   const Blogs = () => (
@@ -205,60 +204,60 @@ const App = ({ initializeBlogs, initializeUsers, bloglist, userlist, createBlog,
         </tbody>
       </table>
     </div>
-  )  
+  )
 
   const classes = useStyles()
 
 
   return (
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: '100vh' }}
-      >
-        <div className={classes.root}>
-          <Router>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justify="center"
+      style={{ minHeight: '100vh' }}
+    >
+      <div className={classes.root}>
+        <Router>
           <AppBar position="static" color="default">
-              <Toolbar>
-                <Typography variant="h6">
-                  <Link to="/" style={{ padding: 5 }}>blogs</Link>
-                </Typography>
-                <Typography variant="h6">
-                  <Link to="/users" style={{ padding: 5 }}>users</Link>
-                </Typography>
+            <Toolbar>
+              <Typography variant="h6">
+                <Link to="/" style={{ padding: 5 }}>blogs</Link>
+              </Typography>
+              <Typography variant="h6">
+                <Link to="/users" style={{ padding: 5 }}>users</Link>
+              </Typography>
 
               {username === '' ?
                 <p>log in to application</p>
                 :
-                  <p>{username} logged in <Button variant="contained" onClick={handleLogout} type="submit">logout</Button></p>
+                <p>{username} logged in <Button variant="contained" onClick={handleLogout} type="submit">logout</Button></p>
               }
-              </Toolbar>
-            </AppBar>
-            <Notification />
+            </Toolbar>
+          </AppBar>
+          <Notification />
 
-            <Route exact path="/" render={() => {
-              return username === '' ?
-                <div>
-                  {loginForm()}
-                </div> :
-                <div>
-                  <Blogs />
-                </div>
-            }} />
-            <Route exact path="/users" render={() => {
-              return (
-                <Users />
-              )
-            }} />
-            <Route exact path="/users/:id" render={({ match }) => <User userId={match.params.id}/>}
-            />
-            <Route exact path="/blogs/:id" render={({ match }) => <BlogInfo blog={bloglist.filter(b => b.id === match.params.id)[0]} />} />
-          </Router>
-        </div>
-      </Grid>
+          <Route exact path="/" render={() => {
+            return username === '' ?
+              <div>
+                {loginForm()}
+              </div> :
+              <div>
+                <Blogs />
+              </div>
+          }} />
+          <Route exact path="/users" render={() => {
+            return (
+              <Users />
+            )
+          }} />
+          <Route exact path="/users/:id" render={({ match }) => <User userId={match.params.id}/>}
+          />
+          <Route exact path="/blogs/:id" render={({ match }) => <BlogInfo blog={bloglist.filter(b => b.id === match.params.id)[0]} />} />
+        </Router>
+      </div>
+    </Grid>
   )
 }
 
