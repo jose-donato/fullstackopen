@@ -1,0 +1,16 @@
+{
+  "name": "small-library-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "library-backend.js",
+  "scripts": {
+    "start": "nodemon library-backend.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.9.6",
+    "graphql": "^14.5.8",
+    "nodemon": "^1.19.4"
+  }
+}
