@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Mutation } from 'react-apollo'
 import { gql } from 'apollo-boost'
+import { useApolloClient } from '@apollo/react-hooks'
 
 const CREATE_BOOK = gql`
   mutation addBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
@@ -18,6 +19,20 @@ const CREATE_BOOK = gql`
   }
 `
 
+const ALL_BOOKS = gql`
+{
+  allBooks  {
+    title
+    author {
+      name
+      born
+      bookCount
+    }
+    published
+  }
+}
+`
+
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('')
@@ -25,6 +40,7 @@ const NewBook = (props) => {
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
+  const client = useApolloClient()
 
   if (!props.show) {
     return null
@@ -47,9 +63,24 @@ const NewBook = (props) => {
     setGenre('')
   }
 
+  const updateCacheWith = (addedBook) => {
+    const includedIn = (set, object) => {
+      return (set.map(book => book.id)).includes(object.id)
+    }
+
+    const dataInStore = client.readQuery({ query: ALL_BOOKS })
+    if (!includedIn(dataInStore.allBooks, addedBook)) {
+      dataInStore.allBooks.push(addedBook)
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: dataInStore
+      })
+    }
+  }
+
   return (
     <div>
-      <Mutation mutation={CREATE_BOOK}>
+      <Mutation mutation={CREATE_BOOK} refetchQueries={[{ query: ALL_BOOKS }]} update={(store, response) => updateCacheWith(response.data.addBook)}>
         {(addBook) =>
           <form onSubmit={() => addBook({
             variables: { title, author, published: parseInt(published), genres }

@@ -3,7 +3,32 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient, useSubscription } from '@apollo/react-hooks'
+import { gql } from 'apollo-boost'
+
+
+const BOOK_DETAILS = gql`
+fragment BookDetails on Book {
+  title
+  author {
+    name
+    born
+    bookCount
+  }
+  published
+  genres
+}
+`
+
+const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+  ${BOOK_DETAILS}
+`
+
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -15,6 +40,14 @@ const App = () => {
     localStorage.clear()
     client.resetStore()
   }
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const title = subscriptionData.data.bookAdded.title
+      const message = `added ${title} to booklist`
+      window.alert(message)
+    }
+  })
 
   return (
     <div>
@@ -37,15 +70,17 @@ const App = () => {
       />
 
       <Books
-        show={page === 'books'}
+        show={page === 'books'} type={'books'}
       />
       {token ? 
-      
-      <NewBook
-        show={page === 'add'}
-      /> 
-
-      
+      <div>     
+        <NewBook
+          show={page === 'add'}
+        /> 
+        <Books
+          show={page === 'recommend'} type={'recommend'}
+        />
+      </div>     
       
       : null}
       
